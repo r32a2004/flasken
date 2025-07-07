@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include "head.html" %}
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const closeButton = document.getElementById('closeButton');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+      closeButton.classList.toggle('hidden');
+    }
+  </script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+  <!-- overlay untuk klik tutup -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleSidebar()"></div>
+
+  <!-- sidebar -->
+  {% include "sidebar.html" %}
+
+    <button id="closeButton"
+    onclick="toggleSidebar()"
+    class="hidden fixed left-72 top-4 px-5 py-2 bg-[#178a5a] text-white font-bold rounded-full border-2 border-white shadow-md z-50 transition-all duration-300 ease-in-out flex items-center space-x-2 hover:bg-white hover:text-[#178a5a]">
+    <i class="fas fa-times"></i>
+    <span>Tutup</span>
+    </button>
+    
+  <!-- navbar atas -->
+  {% include "navbar.html" %}
+
+  <!-- konten halaman -->
+  <main class="flex-1 pt-16 transition-all duration-300">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- back-to-top -->
+  <button id="back-to-top" class="hidden fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+    <i class="fas fa-arrow-up text-lg"></i>
+  </button>
+
+  <script>
+    // back-to-top visibility
+    window.onscroll = () => {
+      const btn = document.getElementById('back-to-top');
+      if (document.documentElement.scrollTop > 300) btn.classList.remove('hidden');
+      else btn.classList.add('hidden');
+    };
+    document.getElementById('back-to-top').onclick = () =>
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+  </script>
+
+</body>
+</html>

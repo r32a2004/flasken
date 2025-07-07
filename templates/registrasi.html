@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-8">
+  <div class="w-full flex justify-end px-8">
+    <!-- User dropdown, sudah ada di base.html -->
+  </div>
+  <div class="flex flex-col items-center mt-4">
+    <div class="bg-white rounded-full shadow-lg flex items-center justify-center w-20 h-20 mb-4">
+      <i class="fas fa-user text-blue-500 text-4xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold mb-1">Form Registrasi</h2>
+    <p class="text-gray-500 mb-2 text-center">Yuk, tambah tim baru dengan cepat dan mudah!<br>
+      Lengkapi form di bawah untuk mendaftarkan karyawan baru</p>
+    <form method="POST" class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md mt-2">
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-user mr-2"></i>Username</label>
+        <input type="text" name="username" placeholder="Masukkan Username" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" autocomplete="off" required>
+        <p class="text-xs text-gray-400 mt-1">Username akan digunakan untuk login ke sistem</p>
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-envelope mr-2"></i>Email</label>
+        <input type="email" name="email" placeholder="Masukkan email" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" autocomplete="off" required>
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-lock mr-2"></i>Password</label>
+        <input type="password" name="password" placeholder="Masukkan password" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" autocomplete="off" required>
+        <p class="text-xs text-gray-400 mt-1">Minimal 6 karakter, kombinasi huruf dan angka</p>
+      </div>
+      <div class="mb-6">
+        <label class="block font-semibold mb-1"><i class="fas fa-users mr-2"></i>Level</label>
+        <select name="level" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+          <option value="">...Pilih Level...</option>
+          <option value="Admin">Admin</option>
+          <option value="Petugas">Petugas</option>
+          <option value="Karyawan">Karyawan</option>
+        </select>
+        <p class="text-xs text-gray-400 mt-1">Pilih level akses sesuai dengan peran karyawan</p>
+      </div>
+      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg shadow transition">Registrasi</button>
+    </form>
+    <p class="text-xs text-gray-400 mt-6">Pastikan semua data sudah benar sebelum mendaftarkan karyawan baru</p>
+  </div>
+</div>
+{% endblock %}

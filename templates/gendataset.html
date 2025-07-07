@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body class="bg-gray-100 min-h-screen">
+
+<section class="py-10">
+    <div class="flex justify-center">
+        <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2 text-center">Generate Dataset <span class="text-blue-600">{{ prs }}</span></h3>
+            <hr class="mb-6 border-blue-200">
+            <div class="flex justify-center mb-6">
+                <img src="{{ url_for('vidfeed_dataset', nbr=prs) }}" class="rounded-lg border-4 border-blue-200 shadow-md w-full max-w-xs" alt="Dataset Video Feed">
+            </div>
+            <div class="flex justify-center">
+                <a class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow transition duration-200 text-lg"
+                   href="{{ url_for('train_classifier', nbr=prs) }}">
+                    Mulai Training
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+{% endblock %}

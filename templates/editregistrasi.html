@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-8">
+  <div class="w-full flex justify-end px-8">
+    <!-- User dropdown, sudah ada di base.html -->
+  </div>
+  <div class="flex flex-col items-center mt-4">
+    <div class="bg-white rounded-full shadow-lg flex items-center justify-center w-20 h-20 mb-4">
+      <i class="fas fa-user-edit text-blue-500 text-4xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold mb-1">Edit Registrasi</h2>
+    <p class="text-gray-500 mb-2 text-center">Edit data akun karyawan di bawah ini</p>
+    <!-- pesan flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="w-full max-w-md mb-2">
+        <div class="rounded-lg px-4 py-2 mb-2 text-white {{ 'bg-green-500' if category == 'success' else 'bg-red-500' }}">
+          <strong>{{ message }}</strong>
+        </div>
+      </div>
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('editadmin_submit') }}" method="post" class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md mt-2">
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-id-badge mr-2"></i>Id</label>
+        <input type="text" name="id" id="id" value="{{ data[0] }}" readonly class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-gray-500 cursor-not-allowed">
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-user mr-2"></i>Username</label>
+        <input type="text" name="username" id="username" value="{{ data[1] }}" placeholder="Masukkan Username" autocomplete="off" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-envelope mr-2"></i>Email</label>
+        <input type="email" name="email" id="email" value="{{ data[2] }}" placeholder="Masukkan email" autocomplete="off" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1"><i class="fas fa-lock mr-2"></i>Password</label>
+        <input type="password" name="password" id="password" placeholder="Masukkan password baru (kosongkan jika tidak diubah)" autocomplete="off" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <p class="text-xs text-gray-400 mt-1">Kosongkan jika tidak ingin mengubah password</p>
+      </div>
+      <div class="mb-6">
+        <label class="block font-semibold mb-1"><i class="fas fa-users mr-2"></i>Level</label>
+        <select name="level" id="level" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="" {% if( data[3]== '') %} selected {% endif %}>...Pilih Level...</option>
+          <option value="Admin" {% if( data[3]== 'Admin') %} selected {% endif %}>Admin</option>
+          <option value="Petugas" {% if( data[3]== 'Petugas') %} selected {% endif %}>Petugas</option>
+          <option value="Karyawan" {% if( data[3]== 'Karyawan') %} selected {% endif %}>Karyawan</option>
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg shadow transition">Update</button>
+    </form>
+    <p class="text-xs text-gray-400 mt-6">Pastikan semua data sudah benar sebelum menyimpan perubahan</p>
+  </div>
+</div>
+{% endblock %}

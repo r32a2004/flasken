@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto px-2 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Live Camera Feed -->
+        <div class="flex-1 flex items-center justify-center">
+            <div class="relative w-full max-w-2xl aspect-square mx-auto flex items-center justify-center">
+                <div class="absolute inset-0 rounded-3xl border-4 border-blue-500 shadow-2xl pointer-events-none"></div>
+                <img src="{{ url_for('video_feed') }}" class="object-contain w-full h-full rounded-3xl" alt="Live Camera Feed">
+                <!-- Overlay -->
+                <div class="absolute top-4 left-4 z-10">
+                    <span class="bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">LIVE</span>
+                </div>
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
+                    <span class="bg-black bg-opacity-60 text-blue-300 text-sm px-2 py-1 rounded shadow">Face Recognition Active</span>
+                </div>
+            </div>
+        </div>
+        <!-- Today Scan Table -->
+        <div class="w-full lg:w-[680px] bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Today Scan</h3>
+            <div class="relative mb-4">
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <div class="overflow-x-auto">
+                <table id="myTable" class="min-w-full text-sm text-gray-700">
+                    <thead>
+                        <tr class="bg-gray-100 text-xs uppercase text-gray-500">
+                            <th class="px-3 py-2 font-semibold">Person #</th>
+                            <th class="px-3 py-2 font-semibold">Nama</th>
+                            <th class="px-3 py-2 font-semibold">Tanggal</th>
+                            <th class="px-3 py-2 font-semibold">Jam Masuk</th>
+                            <th class="px-3 py-2 font-semibold">Jam Keluar</th>
+                            <th class="px-3 py-2 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scandata" class="bg-white">
+                        <!-- Data diisi oleh JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Status badge color mapping
+    function statusBadge(status) {
+        if (status === "Hadir") {
+            return '<span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Hadir</span>';
+        } else if (status === "Pulang") {
+            return '<span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700">Pulang</span>';
+        } else if (status === "Tidak Hadir") {
+            return '<span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">Tidak Hadir</span>';
+        } else {
+            return '<span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-500">'+(status||"-")+'</span>';
+        }
+    }
+
+    $(document).ready(function() {
+        let lastcnt = 0;
+        let cnt;
+        chkNewScan();
+
+        function chkNewScan() {
+            countTodayScan();
+            setTimeout(chkNewScan, 1000);
+        }
+
+        function countTodayScan() {
+            $.ajax({
+                url: '/countTodayScan',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    cnt = data.rowcount;
+                    if (cnt > lastcnt) {
+                        reloadTable();
+                    }
+                    lastcnt = cnt;
+                },
+                error: function(result){
+                    console.log('no result!')
+                }
+            })
+        }
+
+        function reloadTable() {
+            $.ajax({
+                url: '/loadData',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response){
+                    var tr = $("#scandata");
+                    tr.empty();
+                    $.each(response.response, function(i, item) {
+                        tr.append('<tr class="border-b hover:bg-gray-50">'+
+                            '<td class="px-3 py-2">'+(item[1]||"-")+'</td>'+
+                            '<td class="px-3 py-2">'+(item[2]||"-")+'</td>'+
+                            '<td class="px-3 py-2">'+(item[4]||"--")+'</td>'+
+                            '<td class="px-3 py-2">'+(item[5]||"--")+'</td>'+
+                            '<td class="px-3 py-2">'+(item[6]||"--")+'</td>'+
+                            '<td class="px-3 py-2">'+statusBadge(item[3])+'</td>'+
+                        '</tr>');
+                    });
+                },
+                error: function(result){
+                    console.log('no result!')
+                }
+            });
+        }
+    });
+</script>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 1; i < tr.length; i++) { // mulai dari 1 agar header tidak ikut
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+{% endblock %}

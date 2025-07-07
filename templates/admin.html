@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen py-8">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="bg-white rounded-xl shadow p-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h2 class="text-2xl font-bold">Manajemen Petugas</h2>
+        <a href="/registrasi" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow text-center transition w-full md:w-auto">
+          Tambah Petugas
+        </a>
+      </div>
+      <div class="bg-gray-50 rounded-lg border mb-4">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." class="w-full px-4 py-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      </div>
+      <div class="overflow-x-auto rounded-lg shadow">
+        <table id="myTable" class="min-w-full bg-white">
+          <thead>
+            <tr class="bg-gray-100 text-gray-700 text-xs uppercase">
+              <th class="px-4 py-3 font-semibold text-left">Person Id</th>
+              <th class="px-4 py-3 font-semibold text-left">Name</th>
+              <th class="px-4 py-3 font-semibold text-left">Email</th>
+              <th class="px-4 py-3 font-semibold text-left">Level</th>
+              <th class="px-4 py-3 font-semibold text-left">Added</th>
+              <th class="px-4 py-3 font-semibold text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in data %}
+            <tr class="border-b hover:bg-gray-50">
+              <td class="px-4 py-3">{{item[0]}}</td>
+              <td class="px-4 py-3">{{item[1]}}</td>
+              <td class="px-4 py-3">{{item[2]}}</td>
+              <td class="px-4 py-3">
+                {% if item[3] == 'Admin' %}
+                  <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Admin</span>
+                {% elif item[3] == 'Petugas' %}
+                  <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Petugas</span>
+                {% else %}
+                  <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">Karyawan</span>
+                {% endif %}
+              </td>
+              <td class="px-4 py-3">{{item[4]}}</td>
+              <td class="px-4 py-3 flex gap-2">
+                <a href="/editadmin/{{item[0]}}" class="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-yellow-100 text-yellow-700 transition" title="Edit">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a href="/deleteadmin/{{item[0]}}" class="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-red-100 text-red-600 transition" title="Delete" onclick="return confirm('Yakin ingin menghapus?')">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 1; i < tr.length; i++) { // mulai dari 1 agar header tidak ikut
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+{% endblock %}

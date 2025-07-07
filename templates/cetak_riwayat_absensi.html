@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Cetak Riwayat Absensi</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .print-btn { margin: 20px 0; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #333; padding: 6px 8px; text-align: center; }
+        th { background: #eee; }
+        @media print {
+            .print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Riwayat Absensi</h2>
+    <p>Periode: {{ start_date.strftime('%d %B %Y') }} s/d {{ end_date.strftime('%d %B %Y') }}</p>
+    {% if prs_name %}
+    <p>Nama: <b>{{ prs_name }}</b></p>
+    {% endif %}
+    <button class="print-btn" onclick="window.print()">Cetak</button>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                {% if level != 'Karyawan' %}<th>Nama</th>{% endif %}
+                <th>Tanggal</th>
+                <th>Jam Masuk</th>
+                <th>Jam Keluar</th>
+                <th>Kegiatan</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in logs %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                {% if level != 'Karyawan' %}<td>{{ l[6] }}</td>{% endif %}
+                <td>{{ l[0].strftime('%d-%m-%Y') if l[0] else '-' }}</td>
+                <td>{{ l[1] or '-' }}</td>
+                <td>{{ l[2] or '-' }}</td>
+                <td>{{ l[3] or '-' }}</td>
+                <td>{{ l[4] or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<header class="fixed top-0 left-0 right-0 bg-[#1A936F] p-4 flex justify-between items-center text-white z-40">
+  <!-- tombol buka sidebar -->
+  <button onclick="toggleSidebar()" class="text-2xl focus:outline-none">
+    <i class="fas fa-bars"></i>
+  </button>
+  <!-- bagian akun di kanan -->
+  <div class="flex items-center space-x-3">
+    <span class="font-semibold hidden sm:block">{{ session.get('username') }}</span>
+    {% set nama = session.get('username', '') %}
+    {% if nama and nama.split()|length > 0 %}
+      {% set inisial = (nama.split()[0][0] ~ (nama.split()[1][0] if nama.split()|length > 1 else ''))|upper %}
+    {% else %}
+      {% set inisial = '?' %}
+    {% endif %}
+    <div class="h-10 w-10 rounded-full border-2 border-white bg-[#114B3A] flex items-center justify-center text-lg font-bold">
+      {{ inisial }}
+    </div>
+  </div>
+</header>

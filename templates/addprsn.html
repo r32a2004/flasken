@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-12">
+  <div class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-lg p-8 mt-8">
+    <h2 class="text-3xl font-bold mb-1">Tambah Pegawai Baru</h2>
+    <div class="w-16 h-1 bg-blue-500 rounded mb-8"></div>
+    <form method="post" action="/addprsn_submit" class="space-y-5">
+      <div>
+        <label for="txtnbr" class="block font-medium mb-1">ID Karyawan</label>
+        <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" id="txtnbr" name="txtnbr" value="{{ newnbr }}" readonly>
+      </div>
+      <div>
+        <label for="user_id" class="block font-medium mb-1">Pilih Karyawan</label>
+        <select class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" id="user_id" name="user_id" required>
+          <option value="">-- Pilih Karyawan --</option>
+          {% for k in karyawan_baru %}
+            <option value="{{ k[0] }}" data-username="{{ k[1] }}" data-email="{{ k[2] }}">{{ k[1] }} ({{ k[2] }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="txtname" class="block font-medium mb-1">Nama</label>
+        <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" id="txtname" name="txtname" required>
+      </div>
+      <div class="flex justify-between mt-8 gap-4">
+        <a href="/" class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg shadow flex items-center justify-center gap-2 transition text-base">
+          <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow flex items-center justify-center gap-2 transition text-base">
+          Selanjutnya <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var userSelect = document.getElementById('user_id');
+    var nameInput = document.getElementById('txtname');
+    userSelect.addEventListener('change', function() {
+        var selected = userSelect.options[userSelect.selectedIndex];
+        nameInput.value = selected.getAttribute('data-username') || '';
+    });
+});
+</script>
+{% endblock %}

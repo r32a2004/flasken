@@ -1,0 +1,19 @@
+<div id="sidebar" class="fixed left-0 top-0 h-screen w-64 bg-[#2E8F74] text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+    <div class="p-4 border-b border-white">
+      <div class="flex items-center">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" class="h-12 w-12 rounded-full" alt="Logo">
+        <div class="ml-2">
+          <h1 class="text-lg font-bold">Aplikasi Absensi</h1>
+          <p class="text-sm">Face Recognition</p>
+        </div>
+      </div>
+      <div class="text-center mt-6">
+      </div>
+    </div>
+  
+    <nav class="mt-4">
+       <a href="{{ url_for('admin') }}" class="block px-6 py-3 hover:border-l-4 hover:border-white no-underline">Data Petugas</a>
+        <a href="{{ url_for('petugas') }}" class="block px-6 py-3 hover:border-l-4 hover:border-white">Data Pegawai</a>
+        <a href="{{ url_for('riwayat_absensi') }}" class="block px-6 py-3 hover:border-l-4 hover:border-white">Riwayat Absensi</a>
+      </nav>
+  </div>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width:600px;">
+  <h4>{{ 'Edit' if log else 'Tambah' }} Kegiatan</h4>
+  <form method="post" class="mt-3">
+    <div class="mb-3">
+      <label>Person</label>
+      {% if is_karyawan %}
+        <input type="hidden" name="prs_nbr" value="{{ people[0][0] }}">
+        <input type="text" class="form-control" value="{{ people[0][1] }}" readonly>
+      {% else %}
+        <select name="prs_nbr" class="form-select" required>
+          {% for p,n in people %}
+            <option value="{{p}}" {% if log and log[2]==p %}selected{% endif %}>{{n}}</option>
+          {% endfor %}
+        </select>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      <label>Tanggal</label>
+      <input type="date" name="tanggal"
+             value="{% if log %}{% if log[4] is string %}{{ log[4] }}{% else %}{{ log[4].strftime('%Y-%m-%d') }}{% endif %}{% endif %}"
+             class="form-control" required>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <label>Masuk</label>
+        <input type="time" name="masuk" value="{{ log[5] or '' }}" class="form-control">
+      </div>
+      <div class="col">
+        <label>Keluar</label>
+        <input type="time" name="keluar" value="{{ log[6] or '' }}" class="form-control">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label>Status</label>
+      <select name="status" class="form-select">
+        {% for s in ['Hadir','Terlambat','Izin'] %}
+          <option value="{{s}}" {% if log and log[7]==s %}selected{% endif %}>{{s}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label>Kegiatan</label>
+      <textarea name="kegiatan" class="form-control" rows="4">{{ log[8] if log else '' }}</textarea>
+    </div>
+    <button class="btn btn-primary">Simpan</button>
+    <a href="{{ url_for('riwayat_absensi') }}" class="btn btn-light">Batal</a>
+  </form>
+</div>
+{% endblock %}
